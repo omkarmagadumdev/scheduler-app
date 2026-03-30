@@ -168,8 +168,3 @@ Contributions are welcome.
 Please keep changes focused, tested, and documented where relevant.
 
 ---
-
-## License
-
-This project is licensed under the MIT License.
-You can add a `LICENSE` file with the full MIT license text if not already included.
