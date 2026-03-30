@@ -17,6 +17,16 @@ interface Booking {
   time: string;
 }
 
+const getClientOrigin = () =>
+  typeof window !== 'undefined' ? window.location.origin : '';
+
+const buildBookingLink = (origin: string, rawUsername: string) => {
+  const normalizedUsername = rawUsername.trim() || 'user1';
+  const path = `/book/${encodeURIComponent(normalizedUsername)}`;
+
+  return origin ? `${origin}${path}` : path;
+};
+
 export default function Dashboard() {
   const [formData, setFormData] = useState<ScheduleFormData>({
     date: '',
@@ -120,9 +130,7 @@ export default function Dashboard() {
     }
   };
 
-  const bookingLink = `http://localhost:3000/book/${encodeURIComponent(
-    username.trim() || 'user1'
-  )}`;
+  const bookingLink = buildBookingLink(getClientOrigin(), username);
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(bookingLink);
