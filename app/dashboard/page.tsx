@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, FormEvent, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import { isSupabaseConfigured, supabase } from '../../lib/supabase';
 
 interface ScheduleFormData {
   date: string;
@@ -34,6 +34,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchBookings = async () => {
+      if (!isSupabaseConfigured) {
+        setBookingsError('Supabase environment variables are not configured.');
+        setBookingsLoading(false);
+        return;
+      }
+
       setBookingsLoading(true);
       setBookingsError('');
 
@@ -71,6 +77,12 @@ export default function Dashboard() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isSupabaseConfigured) {
+      setErrorMessage('Supabase environment variables are not configured.');
+      return;
+    }
+
     setLoading(true);
     setSuccessMessage('');
     setErrorMessage('');

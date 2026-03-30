@@ -2,7 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react';
 import { useParams } from 'next/navigation';
-import { supabase } from '../../../lib/supabase';
+import { isSupabaseConfigured, supabase } from '../../../lib/supabase';
 
 interface AvailabilitySlot {
   id: string;
@@ -39,6 +39,12 @@ export default function BookingPage() {
   // Fetch availability slots
   useEffect(() => {
     const fetchAvailability = async () => {
+      if (!isSupabaseConfigured) {
+        setSlotsError('Supabase environment variables are not configured.');
+        setLoadingSlots(false);
+        return;
+      }
+
       try {
         setLoadingSlots(true);
         setSlotsError('');
@@ -95,6 +101,11 @@ export default function BookingPage() {
   const handleBookingSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!selectedSlot) return;
+
+    if (!isSupabaseConfigured) {
+      setBookingError('Supabase environment variables are not configured.');
+      return;
+    }
 
     setSavingBooking(true);
     setBookingError('');
